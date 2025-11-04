@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { useAppContext } from "@/context/AppContext";
+import { Mic, Paperclip, Voicemail, VoicemailIcon } from "lucide-react";
 
 type Msg = { text: string; sent: boolean };
 type ChatMap = Record<string, Msg[]>;
@@ -154,7 +155,8 @@ useEffect(() => {
           ))}
         </div>
 
-        <div className="p-4 flex gap-3 border-t border-gray-700 bg-[#111]">
+        <div className="p-4 flex relative gap-3 border-t border-gray-700 bg-[#111]">
+          <div className="absolute right-30 flex gap-4   top-1/3"><Paperclip/> <Mic/> </div>
           <input
             type="text"
             value={input}
