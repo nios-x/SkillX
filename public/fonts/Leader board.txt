@@ -1,0 +1,91 @@
+import React, { useState } from "react";
+
+type LeaderboardUser = {
+  rank: number;
+  name: string;
+  skills: number;
+};
+
+const Leaderboard: React.FC = () => {
+  const [userRank, setUserRank] = useState<number>(42);
+
+  const leaderboardData: LeaderboardUser[] = [
+    { rank: 1, name: "Arjun Dev", skills: 18 },
+    { rank: 2, name: "Nisha Rao", skills: 15 },
+    { rank: 3, name: "Devyansh Mandal", skills: 12 },
+    { rank: 4, name: "Riya Sharma", skills: 10 },
+    { rank: 5, name: "Aman Verma", skills: 9 },
+    { rank: 6, name: "Neha Gupta", skills: 8 },
+    { rank: 7, name: "Sahil Kumar", skills: 7 },
+    { rank: 8, name: "Priya Patel", skills: 6 },
+    { rank: 9, name: "Rohan Mehta", skills: 6 },
+    { rank: 10, name: "Ananya Singh", skills: 5 },
+    { rank: 42, name: "You", skills: 5 },
+  ];
+
+  const calculatePoints = (skills: number): number => skills * 10;
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-[#0f0f11] to-[#1a1a1d] text-gray-100 px-6 py-10">
+      <header className="flex justify-between items-center mb-10">
+        <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500 tracking-tight">
+          SkillX Leaderboard
+        </h1>
+        <div className="text-sm bg-purple-700/40 text-purple-200 px-5 py-2 rounded-xl border border-purple-600 shadow-lg">
+          Your Current Rank: #{userRank}
+        </div>
+      </header>
+
+      <section className="grid grid-cols-3 gap-4 mb-8">
+        <div className="bg-[#1b1b1f] rounded-2xl p-5 border border-purple-700/50 text-center shadow-md shadow-purple-900/30">
+          <p className="text-gray-400 text-sm">Your Rank</p>
+          <h2 className="text-3xl font-semibold text-white mt-1">#{userRank}</h2>
+        </div>
+        <div className="bg-[#1b1b1f] rounded-2xl p-5 border border-purple-700/50 text-center shadow-md shadow-purple-900/30">
+          <p className="text-gray-400 text-sm">Your Points</p>
+          <h2 className="text-3xl font-semibold text-white mt-1">{calculatePoints(5)} pts</h2>
+        </div>
+        <div className="bg-[#1b1b1f] rounded-2xl p-5 border border-purple-700/50 text-center shadow-md shadow-purple-900/30">
+          <p className="text-gray-400 text-sm">Top Rank</p>
+          <h2 className="text-3xl font-semibold text-white mt-1">#1 — {calculatePoints(18)} pts</h2>
+        </div>
+      </section>
+
+      <div className="overflow-y-auto max-h-[500px] rounded-2xl border border-purple-700/40 backdrop-blur-sm bg-[#141416]/60 shadow-inner shadow-purple-900/30">
+        <table className="w-full text-left text-gray-200">
+          <thead className="bg-[#19191b] text-gray-400 text-sm uppercase sticky top-0 backdrop-blur-sm">
+            <tr>
+              <th className="py-3 px-6">Rank</th>
+              <th className="py-3 px-6">User</th>
+              <th className="py-3 px-6">Skills Shared</th>
+              <th className="py-3 px-6">Points</th>
+            </tr>
+          </thead>
+          <tbody>
+            {leaderboardData.map((user) => (
+              <tr
+                key={user.rank}
+                className={`transition-all duration-300 ${
+                  user.rank === userRank
+                    ? "bg-gradient-to-r from-purple-600/40 to-pink-600/40 border-l-4 border-pink-500 font-semibold text-white scale-[1.01]"
+                    : "hover:bg-[#1a1a1d]/60 hover:scale-[1.01]"
+                }`}
+              >
+                <td className="py-4 px-6">#{user.rank}</td>
+                <td className="py-4 px-6">{user.name}</td>
+                <td className="py-4 px-6">{user.skills}</td>
+                <td className="py-4 px-6">{calculatePoints(user.skills)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="fixed bottom-6 right-6 bg-purple-800/40 border border-purple-600 text-sm px-5 py-3 rounded-xl text-purple-200 shadow-xl backdrop-blur-md">
+        Scrolling Rank: #{userRank}
+      </div>
+    </div>
+  );
+};
+
+export default Leaderboard;

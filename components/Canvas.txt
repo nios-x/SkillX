@@ -1,0 +1,184 @@
+import React, { useRef, useState, useEffect } from "react";
+
+export default function SkillXPaint(): JSX.Element {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
+  const drawingRef = useRef<boolean>(false);
+  const lastPosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+
+  const [color, setColor] = useState<string>("#FF4DB6");
+  const [brush, setBrush] = useState<number>(6);
+  const [bgColor, setBgColor] = useState<string>("#0f0b10");
+  const [mode, setMode] = useState<"draw" | "eraser">("draw");
+  const [history, setHistory] = useState<ImageData[]>([]);
+  const historyIndexRef = useRef<number>(-1);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
+
+    const resize = () => {
+      if (!canvas || !container) return;
+      const rect = container.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      const width = Math.max(300, Math.floor(rect.width));
+      const height = Math.max(200, Math.floor(rect.height));
+
+      const tmp = document.createElement("canvas");
+      tmp.width = canvas.width;
+      tmp.height = canvas.height;
+      const tmpCtx = tmp.getContext("2d");
+      tmpCtx?.drawImage(canvas, 0, 0);
+
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      ctx.scale(dpr, dpr);
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctxRef.current = ctx;
+
+      tmpCtx && ctx.drawImage(tmp, 0, 0, width, height);
+    };
+
+    resize();
+    window.addEventListener("resize", resize);
+    return () => window.removeEventListener("resize", resize);
+  }, []);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const width = canvas.width / (window.devicePixelRatio || 1);
+    const height = canvas.height / (window.devicePixelRatio || 1);
+    ctx.fillStyle = bgColor;
+    ctx.fillRect(0, 0, width, height);
+    pushHistory();
+  }, [bgColor]);
+
+  const getPos = (e: MouseEvent | TouchEvent): { x: number; y: number } => {
+    const canvas = canvasRef.current;
+    if (!canvas) return { x: 0, y: 0 };
+    const rect = canvas.getBoundingClientRect();
+    const clientX = (e as TouchEvent).touches ? (e as TouchEvent).touches[0].clientX : (e as MouseEvent).clientX;
+    const clientY = (e as TouchEvent).touches ? (e as TouchEvent).touches[0].clientY : (e as MouseEvent).clientY;
+    return { x: clientX - rect.left, y: clientY - rect.top };
+  };
+
+  const handlePointerDown = (e: any) => {
+    e.preventDefault();
+    drawingRef.current = true;
+    const pos = getPos(e.nativeEvent);
+    lastPosRef.current = pos;
+    const ctx = ctxRef.current;
+    if (!ctx) return;
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+    ctx.lineWidth = brush;
+    ctx.globalCompositeOperation = mode === "eraser" ? "destination-out" : "source-over";
+    ctx.strokeStyle = mode === "eraser" ? "rgba(0,0,0,1)" : color;
+  };
+
+  const handlePointerMove = (e: any) => {
+    if (!drawingRef.current) return;
+    e.preventDefault();
+    const pos = getPos(e.nativeEvent);
+    const ctx = ctxRef.current;
+    if (!ctx) return;
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+    lastPosRef.current = pos;
+  };
+
+  const handlePointerUp = () => {
+    if (!drawingRef.current) return;
+    drawingRef.current = false;
+    const ctx = ctxRef.current;
+    ctx?.closePath();
+    pushHistory();
+  };
+
+  const pushHistory = () => {
+    const canvas = canvasRef.current;
+    const ctx = ctxRef.current;
+    if (!ctx || !canvas) return;
+    const w = canvas.width / (window.devicePixelRatio || 1);
+    const h = canvas.height / (window.devicePixelRatio || 1);
+    const imgData = ctx.getImageData(0, 0, w, h);
+    const clone = new ImageData(new Uint8ClampedArray(imgData.data), imgData.width, imgData.height);
+    let newHistory = history.slice(0, historyIndexRef.current + 1);
+    newHistory.push(clone);
+    if (newHistory.length > 30) newHistory = newHistory.slice(-30);
+    setHistory(newHistory);
+    historyIndexRef.current = newHistory.length - 1;
+  };
+
+  const restoreHistory = (index: number) => {
+    const canvas = canvasRef.current;
+    const ctx = ctxRef.current;
+    if (!canvas || !ctx) return;
+    const item = history[index];
+    if (item) ctx.putImageData(item, 0, 0);
+    historyIndexRef.current = index;
+  };
+
+  const undo = () => {
+    if (historyIndexRef.current > 0) restoreHistory(historyIndexRef.current - 1);
+  };
+
+  const redo = () => {
+    if (historyIndexRef.current < history.length - 1) restoreHistory(historyIndexRef.current + 1);
+  };
+
+  const clearCanvas = () => {
+    const canvas = canvasRef.current;
+    const ctx = ctxRef.current;
+    if (!ctx || !canvas) return;
+    const w = canvas.width / (window.devicePixelRatio || 1);
+    const h = canvas.height / (window.devicePixelRatio || 1);
+    ctx.fillStyle = bgColor;
+    ctx.fillRect(0, 0, w, h);
+    pushHistory();
+  };
+
+  return (
+    <div className="min-h-screen bg-[#0b0710] text-pink-300 p-6 font-sans flex flex-col items-center justify-center">
+      <div className="bg-gradient-to-br from-[#0f0911] to-[#12081a] rounded-3xl p-4 shadow-xl w-full max-w-6xl">
+        <div ref={containerRef} className="rounded-xl overflow-hidden border border-[#241426]" style={{ height: '72vh' }}>
+          <canvas
+            ref={canvasRef}
+            onMouseDown={handlePointerDown}
+            onMouseMove={handlePointerMove}
+            onMouseUp={handlePointerUp}
+            onMouseLeave={handlePointerUp}
+            onTouchStart={handlePointerDown}
+            onTouchMove={handlePointerMove}
+            onTouchEnd={handlePointerUp}
+            className="w-full h-full block touch-none bg-transparent"
+          />
+        </div>
+      </div>
+
+      <footer className="mt-6 flex flex-wrap items-center justify-center gap-4 bg-transparent p-3 rounded-2xl backdrop-blur-md">
+        <button onClick={() => setMode("draw")} className={`px-5 py-3 rounded-2xl transition-all ${mode === "draw" ? "bg-pink-600 text-white shadow-lg shadow-pink-600/30" : "bg-transparent border border-pink-500/30 text-pink-300 hover:bg-pink-500/10 hover:shadow-pink-400/30"}`}>✏️</button>
+        <button onClick={() => setMode("eraser")} className={`px-5 py-3 rounded-2xl transition-all ${mode === "eraser" ? "bg-pink-600 text-white shadow-lg shadow-pink-600/30" : "bg-transparent border border-pink-500/30 text-pink-300 hover:bg-pink-500/10 hover:shadow-pink-400/30"}`}>🧽</button>
+        <button onClick={clearCanvas} className="px-5 py-3 rounded-2xl bg-transparent border border-pink-500/30 text-pink-300 hover:bg-pink-500/10 hover:shadow-pink-400/30 transition-all">🧹</button>
+        <button onClick={undo} className="px-5 py-3 rounded-2xl bg-transparent border border-pink-500/30 text-pink-300 hover:bg-pink-500/10 hover:shadow-pink-400/30 transition-all">↶</button>
+        <button onClick={redo} className="px-5 py-3 rounded-2xl bg-transparent border border-pink-500/30 text-pink-300 hover:bg-pink-500/10 hover:shadow-pink-400/30 transition-all">↷</button>
+        <div className="flex items-center gap-2 ml-4">
+          <label className="text-xs text-pink-300">Size</label>
+          <input type="range" min={1} max={60} value={brush} onChange={(e) => setBrush(Number(e.target.value))} className="w-24" />
+          <input type="color" value={color} onChange={(e) => setColor(e.target.value)} className="w-8 h-8 border-0 rounded-md ml-3 shadow-md shadow-pink-500/40" />
+        </div>
+      </footer>
+    </div>
+  );
+}

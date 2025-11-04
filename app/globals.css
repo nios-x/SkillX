@@ -1,0 +1,96 @@
+@import "tailwindcss";
+.skillxlogo{
+    background: linear-gradient(to right, #ff07c1, #7b00ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}   
+.skillxlogo2{
+    background: linear-gradient(to right, #ff07c1, #7b00ff);
+}   
+
+@font-face {
+  font-family: 'MyFont1';
+  src: url('/fonts/file.a513d5a4.woff2') format('truetype');
+
+}
+@font-face {
+  font-family: 'MyFont2';
+  src: url('/fonts/file1.9877ce20.woff2') format('truetype');
+
+}
+@font-face {
+  font-family: 'MyFont3';
+  src: url('/fonts/file2.89a51fcc.woff2') format('truetype');
+}
+@font-face {
+  font-family: 'MyFont4';
+  src: url('/fonts/Dirtyline.otf') format('truetype');
+}
+
+@font-face {
+  font-family: 'MyFont5';
+  src: url('/fonts/1Ptgg87LROyAm3Kz-C8.woff2') format('truetype');
+}
+
+.poppins {
+  font-family: 'Poppins';
+}
+
+.mf1 {
+  font-family: 'MyFont1';
+}
+
+.mf2 {
+  font-family: 'MyFont2';
+}
+
+.mf3 {
+  font-family: 'MyFont3';
+}
+.mf4 {
+  font-family: 'MyFont4';
+}
+.mf5 {
+  font-family: 'MyFont5';
+}
+svg text {
+  paint-order: stroke;
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 2px;
+}
+
+  .glow {
+    text-shadow: 0 0 10px #a855f7, 0 0 20px #ec4899, 0 0 30px #6366f1;
+  }
+
+/* 
+  .stroke-white {
+    -webkit-text-stroke: 0.1px white; 
+} 
+
+*/
+   
+html,
+body {
+  height: 100%;
+  overflow: hidden; /* important: let Lenis control */
+}
+
+.lenis {
+  height: auto;
+}
+
+.lenis-smooth > html,
+.lenis-smooth > body {
+  overflow: hidden;
+}
+
+/* This makes sure Lenis has a scrollable area */
+.lenis.lenis-smooth [data-lenis-container] {
+  min-height: 100%;
+  will-change: transform;
+  transform: translateZ(0);
+}
+.text-line span {
+  transition: color 0.2s linear;
+}

@@ -1,0 +1,102 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+  // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Availability {
+  AVAILABLE
+  BUSY
+  OFFLINE
+} 
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  designation String @default("")
+  skills           SkillsOnUsers[]
+  stars    Int      @default(3)
+  profileImage String?
+  experience Int      @default(0)
+  bio       String   @default("")
+  points    Int      @default(10)
+  Availability Availability @default(AVAILABLE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  certificates  Certificate[]
+  sentMessages  Message[]    @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
+
+  teachto           Teaching[] @relation("TeachTo")
+  learnfrom     Teaching[] @relation("LearnFrom")
+}
+
+model Skills {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  users     SkillsOnUsers[]
+}
+
+model SkillsOnUsers {
+  userId  String
+  skillId String
+
+  user    User   @relation(fields: [userId], references: [id])
+  skill   Skills @relation(fields: [skillId], references: [id])
+
+  @@id([userId, skillId])
+}
+
+model Teaching {
+  id        String   @id @default(cuid())
+  userId    String
+  friendId  String
+  user      User     @relation("TeachTo", fields: [userId], references: [id])
+  other    User     @relation("LearnFrom", fields: [friendId], references: [id])
+  isAccepted Boolean
+  desc      String
+  skill     String
+}
+
+model Certificate{
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  institution String
+  issueDate DateTime
+  createdAt DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id])
+}
+
+model Message{
+  id        String   @id @default(cuid())
+  senderId  String
+  receiverId String
+  content   String
+  createdAt DateTime @default(now())
+  sender      User     @relation("SentMessages", fields: [senderId], references: [id])
+  receiver    User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+} 
+
+
+model OTP {
+  id        String   @id @default(cuid())
+  email     String @unique
+  password  String 
+  code      String
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  
+}
