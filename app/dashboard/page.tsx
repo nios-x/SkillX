@@ -44,6 +44,14 @@ export default function HomePage() {
   const [selectedTutor, setSelectedTutor] = useState({ id: "", name: "", skills: [] });
   const [showPopup, setShowPopup] = useState(false);
   const popupRef = useRef<HTMLDivElement>(null);
+  function handleScroll() {
+    const halfScroll = (document.body.scrollHeight - window.innerHeight) / 2;
+    window.scrollTo({
+      top: halfScroll,
+      behavior: 'smooth',
+    });
+  }
+
 
   // 🔮 Initial page load animations
   useGSAP(() => {
@@ -149,22 +157,22 @@ export default function HomePage() {
   }));
 
   useEffect(() => {
-  const gradient = document.querySelector(".floating-gradient-right") as HTMLElement;
-  if (!gradient) return;
+    const gradient = document.querySelector(".floating-gradient-right") as HTMLElement;
+    if (!gradient) return;
 
-  const handleMouseMove = (e: MouseEvent) => {
-    // Move the gradient toward the actual cursor position
-    gsap.to(gradient, {
-      x: e.clientX - 200, // offset half width
-      y: e.clientY - 200, // offset half height
-      duration: 0.6,
-      ease: "power2.out",
-    });
-  };
+    const handleMouseMove = (e: MouseEvent) => {
+      // Move the gradient toward the actual cursor position
+      gsap.to(gradient, {
+        x: e.clientX - 200, // offset half width
+        y: e.clientY - 200, // offset half height
+        duration: 0.6,
+        ease: "power2.out",
+      });
+    };
 
-  window.addEventListener("mousemove", handleMouseMove);
-  return () => window.removeEventListener("mousemove", handleMouseMove);
-}, []);
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
 
 
@@ -275,6 +283,7 @@ export default function HomePage() {
                   onRequest={() => handleTutorRequest(tutor.id)}
                   setSelectedTutor={setSelectedTutor}
                   setShowPopup={setShowPopup}
+                  handleScroll={handleScroll}
                 />
               ))}
             </div>

@@ -14,6 +14,7 @@ export function TutorCard({
   skills,
   Availability,
   setSelectedTutor,
+  handleScroll,
   setShowPopup,
 }: any) {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -105,6 +106,7 @@ export function TutorCard({
 
         <button
           onClick={() => {
+            handleScroll();
             setShowPopup(true);
             setSelectedTutor({ id, name, skills });
           }}
