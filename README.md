@@ -1,5 +1,7 @@
 # 🚀 SkillX — Learn, Teach & Grow Together! 🎯
 
+DEMO: How to use -> https://www.linkedin.com/posts/soumya-jaiswal7708_skillx-peerlearning-webrtc-activity-7392636768027709440-M8Fk?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEKNKZABRHuApzGB_TqlvYIBJ4WvT7Iaj68
+
 **SkillX** is a **peer-to-peer skill-upgrading platform** that empowers learners to become teachers and share knowledge through real-time interactive sessions.  
 
 Built with modern web technologies, SkillX brings together **learning, collaboration, and gamification** — creating a community where knowledge sharing is rewarded.  
