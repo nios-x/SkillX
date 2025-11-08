@@ -32,6 +32,10 @@ Built with modern web technologies, SkillX brings together **learning, collabora
     9️⃣ Visit **Messages** → Chat with **Milli AI** 🤖  
     🔟 Check **Leaderboard & Profile** to view points and ranks 🏆
 
+<img width="1920" height="1080" alt="Screenshot 2025-11-08 112330" src="https://github.com/user-attachments/assets/adb5bf27-78e1-47cf-8e7e-40052298d080" />
+<img width="1920" height="1080" alt="Screenshot 2025-11-08 112830" src="https://github.com/user-attachments/assets/44cac73a-13e0-42d4-a7f4-22baf67bf9de" />
+<img width="1920" height="1080" alt="Screenshot 2025-11-08 112842" src="https://github.com/user-attachments/assets/8b1d7c85-5c41-4e1c-9491-c336773fc8eb" />
+<img width="1920" height="1080" alt="Screenshot 2025-11-08 112858" src="https://github.com/user-attachments/assets/a41bcd29-6956-456b-8a89-96519d3a3f55" />
 
 
 ### 📆 Session Requests & Scheduling  
