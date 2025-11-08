@@ -5,7 +5,8 @@ import { Trophy, Star, Award, Code, Flame } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 
 export default function ProfilePage() {
-  const [ userdata, setUserdata ] = useState<any>({});
+  const [ userdata2, setUserdata2 ] = useState<any>({});
+  const {userdata} = useAppContext();
   const [open, setOpen] = useState(1);
   const [loading, setLoading] = useState(false);
   const {id} = useParams()
@@ -28,7 +29,7 @@ useEffect(() => {
       const data = await res.json();
 
       if (res.ok && data.user) {
-        setUserdata(data.user);  // ✅ State update triggers re-render
+        setUserdata2(data.user);  // ✅ State update triggers re-render
       } else {
         console.error("User not found:", data.error);
       }
@@ -46,24 +47,23 @@ useEffect(() => {
   return () => controller.abort();
 }, [id]);
 
-  const params = useParams();
   const [form, setForm] = useState({
-    name: userdata?.name || "",
-    bio: userdata?.bio || "",
-    designation: userdata?.designation || "",
+    name: userdata2?.name || "",
+    bio: userdata2?.bio || "",
+    designation: userdata2?.designation || "",
     profileImage:
-      userdata?.profileImage ||
-      `https://ui-avatars.com/api/?name=${userdata?.name}&background=ff5bd6&color=fff`,
+      userdata2?.profileImage ||
+      `https://ui-avatars.com/api/?name=${userdata2?.name}&background=ff5bd6&color=fff`,
   });
 
-  if (!userdata)
+  if (!userdata2)
     return (
       <div className="min-h-screen flex items-center justify-center text-pink-200">
         Loading profile...
       </div>
     );
     //@ts-ignore
-const avatar = userdata?.profileImage? userdata.profileImage: `https://ui-avatars.com/api/?name=${encodeURIComponent(     userdata?.name || "User"    )}&background=ff5bd6&color=fff`;  const user = {    name: userdata.name,    handle: userdata.email,    avatar,    bio: userdata.bio || "Digital creator & software innovator.",    rating: (userdata.stars || 0).toFixed(1),    ranking: Math.floor(1000 / (userdata.points + 1)),    totalUsers: 5000,    skillsAdded: ["React", "Next.js", "Node.js", "TypeScript", "WebSockets"],    skillsLearned: Math.floor(userdata.points / 2),    contributions: Array.from({ length: 12 }, () =>      Math.floor(Math.random() * 10)    ),  };  const topPercent = Math.max(
+const avatar = userdata2?.profileImage? userdata2.profileImage: `https://ui-avatars.com/api/?name=${encodeURIComponent(     userdata2?.name || "User"    )}&background=ff5bd6&color=fff`;  const user = {    name: userdata2.name,    handle: userdata2.email,    avatar,    bio: userdata2.bio || "Digital creator & software innovator.",    rating: (userdata2.stars || 0).toFixed(1),    ranking: Math.floor(1000 / (userdata2.points + 1)),    totalUsers: 5000,    skillsAdded: ["React", "Next.js", "Node.js", "TypeScript", "WebSockets"],    skillsLearned: Math.floor(userdata2.points / 2),    contributions: Array.from({ length: 12 }, () =>      Math.floor(Math.random() * 10)    ),  };  const topPercent = Math.max(
     0,
     Math.round(((user.totalUsers - user.ranking + 1) / user.totalUsers) * 100)
   );
@@ -82,7 +82,7 @@ const avatar = userdata?.profileImage? userdata.profileImage: `https://ui-avatar
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          id: userdata?.id||"",
+          id: userdata2?.id||"",
           name: form.name,
           bio: form.bio,
           designation: form.designation,
@@ -92,7 +92,7 @@ const avatar = userdata?.profileImage? userdata.profileImage: `https://ui-avatar
 
       const data = await res.json();
       if (res.ok) {
-        setUserdata(data.user);
+        setUserdata2(data.user);
         setOpen(1);
       } else {
         alert(data.error || "Failed to update profile");
@@ -124,12 +124,12 @@ const avatar = userdata?.profileImage? userdata.profileImage: `https://ui-avatar
           <button className="absolute top-6 translate-y-[50px] right-6 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg shadow-md hover:opacity-90 transition cursor-pointer" onClick={ () => window.location.href = `/messages?id=${id||""}`}>
             Message
           </button>
-          <button
+          {id===userdata.id && <button
             className="absolute top-6 right-6 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg shadow-md hover:opacity-90 transition cursor-pointer"
             onClick={() => setOpen(0)}
           >
             Edit Profile
-          </button>
+          </button>}
 
           {/* HEADER */}
           <header className="flex flex-col md:flex-row gap-8 items-center">
@@ -172,9 +172,9 @@ const avatar = userdata?.profileImage? userdata.profileImage: `https://ui-avatar
               },
               {
                 label: "Points",
-                value: userdata.points,
+                value: userdata2.points,
                 icon: <Flame className="w-4 h-4 inline" />,
-                width: Math.min(100, userdata.points / 20),
+                width: Math.min(100, userdata2.points / 20),
                 gradient: "linear-gradient(90deg,#ffb3da,#caa4ff)",
               },
               {
@@ -256,19 +256,19 @@ const avatar = userdata?.profileImage? userdata.profileImage: `https://ui-avatar
                 <div className="flex justify-between border-b border-[rgba(255,255,255,0.05)] py-2">
                   <span className="text-sm text-pink-200/70">Stars</span>
                   <span className="text-sm font-semibold text-pink-100">
-                    {userdata.stars}
+                    {userdata2.stars}
                   </span>
                 </div>
                 <div className="flex justify-between border-b border-[rgba(255,255,255,0.05)] py-2">
                   <span className="text-sm text-pink-200/70">Points</span>
                   <span className="text-sm font-semibold text-pink-100">
-                    {userdata.points}
+                    {userdata2.points}
                   </span>
                 </div>
                 <div className="flex justify-between border-b border-[rgba(255,255,255,0.05)] py-2">
                   <span className="text-sm text-pink-200/70">Joined</span>
                   <span className="text-sm font-semibold text-pink-100">
-                    {new Date(userdata.createdAt).toLocaleDateString()}
+                    {new Date(userdata2.createdAt).toLocaleDateString()}
                   </span>
                 </div>
               </div>
@@ -280,12 +280,12 @@ const avatar = userdata?.profileImage? userdata.profileImage: `https://ui-avatar
                   <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.06)] text-pink-100 flex items-center gap-1">
                     <Trophy className="w-3 h-3" /> Early Adopter
                   </span>
-                  {userdata.stars >= 3 && (
+                  {userdata2.stars >= 3 && (
                     <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.06)] text-pink-100 flex items-center gap-1">
                       <Star className="w-3 h-3" /> 3★ Achiever
                     </span>
                   )}
-                  {userdata.points >= 100 && (
+                  {userdata2.points >= 100 && (
                     <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.06)] text-pink-100 flex items-center gap-1">
                       <Flame className="w-3 h-3" /> 100+ Points
                     </span>
