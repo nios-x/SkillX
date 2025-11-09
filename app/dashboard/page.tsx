@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Sparkles, TrendingUp, Users, Rocket, Zap } from "lucide-react";
 import { Toaster, toast } from "sonner";
 import gsap from "gsap";
+import { Calendar } from "@/components/ui/calendar"
 
 import { useGSAP } from '@gsap/react';
 
@@ -43,6 +44,7 @@ export default function HomePage() {
   const [desc, setDesc] = useState("");
   const [selectedTutor, setSelectedTutor] = useState({ id: "", name: "", skills: [] });
   const [showPopup, setShowPopup] = useState(false);
+  const [date, setDate] = useState<Date | undefined>(new Date())
   const popupRef = useRef<HTMLDivElement>(null);
   function handleScroll() {
     const halfScroll = (document.body.scrollHeight - window.innerHeight) / 2;
@@ -233,7 +235,12 @@ export default function HomePage() {
                 className="w-full h-10 bg-white/20 rounded-md mt-1 pl-3 text-sm focus:outline-none"
                 placeholder="Description"
               />
-
+              <Calendar
+                mode="single"
+                selected={date}
+                onSelect={setDate}
+                className="rounded-lg border bg-white/20  mt-4 w-full"
+              />
               <button
                 onClick={sendReq}
                 className="mt-5 w-full bg-gradient-to-r from-fuchsia-600 to-purple-700 text-white py-2 px-4 rounded-lg font-semibold hover:scale-[1.03] transition-transform"
