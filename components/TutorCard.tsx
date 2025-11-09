@@ -66,7 +66,9 @@ export function TutorCard({
             </p>
           </div>
         </div>
-
+            <div className="text-xs pt-4 flex  gap-1 text-blue-500">
+              <img src="https://imgs.search.brave.com/TYw8th3eqlw2IGVg8MkisORR6uQthrEG5tKUqiT9xjw/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9ibG9n/LndhYWxheHkuY29t/L3dwLWNvbnRlbnQv/dXBsb2Fkcy8yMDIx/LzAxLzYucG5n" alt="" className="h-5  rounded-xs " /> <span className="pt-1"> Linkedin</span>
+            </div>
         <div className="flex items-center gap-1 mt-3">
           {Array.from({ length: 5 }).map((_, i) => (
             <Star

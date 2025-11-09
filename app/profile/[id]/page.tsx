@@ -106,7 +106,7 @@ const avatar = userdata2?.profileImage? userdata2.profileImage: `https://ui-avat
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#0f0b12] via-[#0b0910] to-[#120717] text-pink-400 p-6">
+    <div className="min-h-screen flex items-center scale-105  justify-center bg-gradient-to-b from-[#0f0b12] via-[#0b0910] to-[#120717] text-pink-400 p-6">
       <style>{`
         @keyframes spin-slow {
           from { transform: rotate(0deg); }
@@ -130,6 +130,7 @@ const avatar = userdata2?.profileImage? userdata2.profileImage: `https://ui-avat
           >
             Edit Profile
           </button>}
+          
 
           {/* HEADER */}
           <header className="flex flex-col md:flex-row gap-8 items-center">
@@ -150,8 +151,12 @@ const avatar = userdata2?.profileImage? userdata2.profileImage: `https://ui-avat
               <p className="mt-2 text-sm text-pink-100/70 max-w-lg">
                 {user.bio}
               </p>
+               <div className="text-xs pt-4 flex underline gap-1 text-blue-500">
+              <img src="https://imgs.search.brave.com/TYw8th3eqlw2IGVg8MkisORR6uQthrEG5tKUqiT9xjw/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9ibG9n/LndhYWxheHkuY29t/L3dwLWNvbnRlbnQv/dXBsb2Fkcy8yMDIx/LzAxLzYucG5n" alt="" className="h-5  rounded-xs " /> <span className="pt-1"> Linkedin</span>
+            </div>
             </div>
           </header>
+          
 
           {/* STATS */}
           <section className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4 bg-[rgba(255,255,255,0.015)] rounded-xl p-4">

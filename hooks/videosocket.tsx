@@ -8,9 +8,9 @@ import React, {
   ReactNode,
 } from "react";
 import { useAppContext } from "@/context/AppContext";
+import Canvas from "@/components/Canvas";
 
 const SocketContext = createContext<any>(null);
-import Canvas from "@/components/Canvas";
 export function SocketProvider({ children }: { children: ReactNode }) {
   const [remoteUser, setRemoteUser] = useState<string | null>(null);
   const [localStream, setLocalStream] = useState<MediaStream | null>(null);
