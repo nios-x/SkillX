@@ -1,4 +1,4 @@
-# 🚀 SkillX — Learn, Teach & Grow Together! 🎯
+# 🚀 SkillX — Learn, Teach & Grow Together! 
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/32c40c87-020f-407b-99d7-81380f14b5ca" />
 
 DEMO: How to use -> https://www.linkedin.com/posts/soumya-jaiswal7708_skillx-peerlearning-webrtc-activity-7392636768027709440-M8Fk?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEKNKZABRHuApzGB_TqlvYIBJ4WvT7Iaj68
